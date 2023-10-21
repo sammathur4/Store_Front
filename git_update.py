@@ -80,7 +80,7 @@ def main():
         names =''
         for file in changed_files:
             print(file)
-            names += ", " + f'file'
+            names += ", " + f'{file}'
 
         # Perform 'git add', 'git commit', and 'git push'
         subprocess.run(['git', 'add', '.'])
