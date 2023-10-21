@@ -77,11 +77,14 @@ def main():
 
     if changed_files:
         print("Changed files:")
+        names =''
         for file in changed_files:
             print(file)
+            names += ", " + f'file'
 
         # Perform 'git add', 'git commit', and 'git push'
         subprocess.run(['git', 'add', '.'])
+        commit_message += f' {names}'
         subprocess.run(['git', 'commit', '-m', commit_message])
         subprocess.run(['git', 'push'])
 
