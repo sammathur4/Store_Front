@@ -84,7 +84,7 @@ def main():
 
         # Perform 'git add', 'git commit', and 'git push'
         subprocess.run(['git', 'add', '.'])
-        commit_message += f' {names}'
+        commit_message += f'{names}'
         subprocess.run(['git', 'commit', '-m', commit_message])
         subprocess.run(['git', 'push'])
 
