@@ -1,3 +1,4 @@
+from django.db.models import Q, F
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,24 +16,10 @@ Product = store.models.Product
 #     return x
 
 def say_hello(request):
-    # x = calculate()
-    # product = Product.objects.filter(pk = 0).first()
-    # try:
-    #     query_set = Product.objects.get(pk = 1)
-    #     query_set.filter().filter().order_by()
-    # except ObjectDoesNotExist:
-    #     pass
-
-    # prodcut = Product.objects.filter(pk=0).exist()
-
-    # query_set = Product.objects.all()
-    # query_set = Product.objects.filter(price__gt=20)
-    # query_set = Product.objects.filter(price__range=(20,30))
-    query_set = Product.objects.filter(title__icontains = 'coffee')
-    # for product in query_set:
-    #     print(product)
-
-
+    # query_set = Product.objects.filter(inventory__lt=10).filter(price__gt=10)
+    # query_set = Product.objects.filter(title__icontains = 'coffee')
+    # query_set = Product.objects.filter(Q(inventory__lt =10) | Q(price__lt=20))
+    query_set = Product.objects.filter(inventory=F('collection__id'))
 
     return render(request,
                   'hello.html',
