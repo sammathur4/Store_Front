@@ -19,7 +19,8 @@ def say_hello(request):
     # query_set = Product.objects.filter(inventory__lt=10).filter(price__gt=10)
     # query_set = Product.objects.filter(title__icontains = 'coffee')
     # query_set = Product.objects.filter(Q(inventory__lt =10) | Q(price__lt=20))
-    query_set = Product.objects.filter(inventory=F('collection__id'))
+    # query_set = Product.objects.order_by('price','-title')
+    query_set = Product.objects.all()
 
     return render(request,
                   'hello.html',
