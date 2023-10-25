@@ -7,13 +7,13 @@ from django.db.models.aggregates import *
 from django.db.models import *
 from django.db.models.functions import *
 from django.contrib.contenttypes.models import ContentType
-import tags.models
+
 
 Product = store.models.Product
 OrderItem = store.models.OrderItem
 Order = store.models.Order
 Customer = store.models.Customer
-TaggedItem = tags.models.TaggedItem
+Collection = store.models.Collection
 
 # Create your views here.
 
@@ -27,12 +27,22 @@ TaggedItem = tags.models.TaggedItem
 
 
 def say_hello(request):
-    query_set = TaggedItem.objects.get_tags_for(Product, 1)
+
+    collection=Collection()
+
+    collection.title = 'Video Games'
+    collection.featured_products=Product(pk=1)
+    # collection.featured_product_id = 1
+    collection.save()
+    collection.id
+    #
+    # collection = Collection.objects.create(name="Video Games 2", featured_products=1)
+    # collection.id
+
+
     return render(request,
                   'hello.html',
                   {
                       'name': 'Sam',
-                      'result': query_set,
-                      # 'products': list(query_set)
-                  }
+                      }
                   )
