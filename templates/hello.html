@@ -9,7 +9,9 @@
 
   <ul>
     {% for product in products %}
-    <li>{{ product.title }}</li>
+    <li>{{ product.id }} - {{ product.customer.first_name }}</li>
+<!--    <li>{{ product.title }} ${{ product.price }}</li>-->
+<!--    <li>{{ product.title }} -{{ product.collection.title }}</li>-->
     {% endfor %}
   </ul>
   </body>

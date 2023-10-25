@@ -4,7 +4,11 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 import store.models
 
+
+
 Product = store.models.Product
+OrderItem = store.models.OrderItem
+Order = store.models.Order
 
 
 # Create your views here.
@@ -16,16 +20,19 @@ Product = store.models.Product
 #     return x
 
 def say_hello(request):
-    # query_set = Product.objects.filter(inventory__lt=10).filter(price__gt=10)
-    # query_set = Product.objects.filter(title__icontains = 'coffee')
-    # query_set = Product.objects.filter(Q(inventory__lt =10) | Q(price__lt=20))
-    # query_set = Product.objects.order_by('price','-title')
-    query_set = Product.objects.all()
-    #
+    # query_set = Product.objects.filter(id__in = OrderItem.objects.values(
+    #     'product_id').distinct()
+    #                                    ).order_by('title')
+    # query_set = OrderItem.objects.values('product_id').distinct()
+
+    # query_set = Product.objects.only('id', 'title')
+    # query_set = Product.objects.prefetch_related('promotions').select_related('collection').all()
+
+    query_set = Order.objects.select_related('customer').order_by('-placed_at')[:5]
     return render(request,
                   'hello.html',
                   {
-                      'name':'Sam',
+                      'name': 'Sam',
                       'products': list(query_set)
-                   }
+                  }
                   )
