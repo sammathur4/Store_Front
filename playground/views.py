@@ -23,25 +23,11 @@ TaggedItem = tags.models.TaggedItem
 #     y = 2
 #     return x
 
+
+
+
 def say_hello(request):
-    content_type = ContentType.objects.get_for_model(Product)
-    query_set = (TaggedItem.objects.
-    select_related('tag').
-    filter(
-        content_type=content_type,
-        object_id=1
-    ))
-
-
-    # discounted_price = ExpressionWrapper(F('price')*0.8, output_field=DecimalField())
-    #
-    # query_set = Product.objects.annotate(discounted_price=discounted_price)
-
-
-    # query_set = Customer.objects.annotate(
-    #     full_name=Concat('first_name', Value(' '), 'last_name')
-    # )
-
+    query_set = TaggedItem.objects.get_tags_for(Product, 1)
     return render(request,
                   'hello.html',
                   {
