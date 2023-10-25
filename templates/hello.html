@@ -5,15 +5,13 @@
     {% else %}
     <h1>Hello World</h1>
     {% endif %}
-    {{ result }}
+<!--    {{ result }}-->
 
 
-<!--  <ul>-->
-<!--    {% for product in products %}-->
-<!--    <li>{{ product.id }} - {{ product.customer.first_name }}</li>-->
-<!--&lt;!&ndash;    <li>{{ product.title }} ${{ product.price }}</li>&ndash;&gt;-->
-<!--&lt;!&ndash;    <li>{{ product.title }} -{{ product.collection.title }}</li>&ndash;&gt;-->
-<!--    {% endfor %}-->
-<!--  </ul>-->
+  <ul>
+    {% for results in result %}
+    <li>{{ results }}</li>
+    {% endfor %}
+  </ul>
   </body>
 </html>

@@ -4,10 +4,13 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 import store.models
 from django.db.models.aggregates import *
+from django.db.models import *
+from django.db.models.functions import *
 
 Product = store.models.Product
 OrderItem = store.models.OrderItem
 Order = store.models.Order
+Customer = store.models.Customer
 
 
 # Create your views here.
@@ -19,25 +22,20 @@ Order = store.models.Order
 #     return x
 
 def say_hello(request):
-    # query_set = Product.objects.filter(id__in = OrderItem.objects.values(
-    #     'product_id').distinct()
-    #                                    ).order_by('title')
-    # query_set = OrderItem.objects.values('product_id').distinct()
+    # query_set = Customer.objects.annotate(is_new=Value(True))
+    query_set = Customer.objects.annotate(
+        full_name=Func(F('first_name'),Value(' '),F('last_name'), function='CONCAT')
+    )
 
-    # query_set = Product.objects.only('id', 'title')
-    # query_set = Product.objects.prefetch_related('promotions').select_related('collection').all()
+    query_set = Customer.objects.annotate(
+        full_name=Concat('first_name', Value(' '), 'last_name')
+    )
 
-    # query_set = Order.objects.select_related('customer').order_by('-placed_at')[:5]
-    # query_set = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
-
-    # result = Product.objects.aggregate(count=Count('id'),
-    #                                    min_price = Min('price'))
-    result = Product.objects.filter(collection__id = 1).aggregate(count=Count('id'))
     return render(request,
                   'hello.html',
                   {
                       'name': 'Sam',
-                      'result': result,
+                      'result': query_set,
                       # 'products': list(query_set)
                   }
                   )
