@@ -28,7 +28,8 @@ def say_hello(request):
     # query_set = Product.objects.only('id', 'title')
     # query_set = Product.objects.prefetch_related('promotions').select_related('collection').all()
 
-    query_set = Order.objects.select_related('customer').order_by('-placed_at')[:5]
+    # query_set = Order.objects.select_related('customer').order_by('-placed_at')[:5]
+    query_set = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
     return render(request,
                   'hello.html',
                   {
