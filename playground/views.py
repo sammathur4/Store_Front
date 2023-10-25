@@ -22,14 +22,14 @@ Customer = store.models.Customer
 #     return x
 
 def say_hello(request):
-    # query_set = Customer.objects.annotate(is_new=Value(True))
-    query_set = Customer.objects.annotate(
-        full_name=Func(F('first_name'),Value(' '),F('last_name'), function='CONCAT')
-    )
+    discounted_price = ExpressionWrapper(F('price')*0.8, output_field=DecimalField())
 
-    query_set = Customer.objects.annotate(
-        full_name=Concat('first_name', Value(' '), 'last_name')
-    )
+    query_set = Product.objects.annotate(discounted_price=discounted_price)
+
+
+    # query_set = Customer.objects.annotate(
+    #     full_name=Concat('first_name', Value(' '), 'last_name')
+    # )
 
     return render(request,
                   'hello.html',
