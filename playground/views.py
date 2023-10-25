@@ -6,12 +6,14 @@ import store.models
 from django.db.models.aggregates import *
 from django.db.models import *
 from django.db.models.functions import *
+from django.contrib.contenttypes.models import ContentType
+import tags.models
 
 Product = store.models.Product
 OrderItem = store.models.OrderItem
 Order = store.models.Order
 Customer = store.models.Customer
-
+TaggedItem = tags.models.TaggedItem
 
 # Create your views here.
 
@@ -22,9 +24,18 @@ Customer = store.models.Customer
 #     return x
 
 def say_hello(request):
-    discounted_price = ExpressionWrapper(F('price')*0.8, output_field=DecimalField())
+    content_type = ContentType.objects.get_for_model(Product)
+    query_set = (TaggedItem.objects.
+    select_related('tag').
+    filter(
+        content_type=content_type,
+        object_id=1
+    ))
 
-    query_set = Product.objects.annotate(discounted_price=discounted_price)
+
+    # discounted_price = ExpressionWrapper(F('price')*0.8, output_field=DecimalField())
+    #
+    # query_set = Product.objects.annotate(discounted_price=discounted_price)
 
 
     # query_set = Customer.objects.annotate(
