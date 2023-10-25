@@ -20,6 +20,9 @@ class TaggedItemManager(models.Manager):
 class Tag(models.Model):
     label = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.label
+
 
 class TaggedItem(models.Model):
     objects = TaggedItemManager()
@@ -29,8 +32,3 @@ class TaggedItem(models.Model):
     content_object = GenericForeignKey()
 
 
-class LikedItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey()

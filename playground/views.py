@@ -28,16 +28,10 @@ Collection = store.models.Collection
 
 def say_hello(request):
 
-    collection=Collection()
-
-    collection.title = 'Video Games'
-    collection.featured_products=Product(pk=1)
-    # collection.featured_product_id = 1
+    collection=Collection(pk=11)
+    # collection.title = "Games"
+    collection.featured_products=None
     collection.save()
-    collection.id
-    #
-    # collection = Collection.objects.create(name="Video Games 2", featured_products=1)
-    # collection.id
 
 
     return render(request,

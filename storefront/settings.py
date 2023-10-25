@@ -35,10 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "debug_toolbar",
     'playground',
+    'debug_toolbar',
     'store',
-    'tags'
+    'store_custom',
+    'tags',
+    'likes'
 ]
 
 MIDDLEWARE = [
