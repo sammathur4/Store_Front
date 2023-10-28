@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
 from django.http import *
 from rest_framework import *
@@ -15,7 +16,7 @@ def product_list(request):
         serializer = ProductSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
     elif request.method == 'POST':
-        serializer = ProductSerializer(data = request.data)
+        serializer = ProductSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         print(serializer.validated_data)
@@ -37,15 +38,46 @@ def product_details(request, id):
         print(serializer.data)
         return Response(serializer.data)
 
-    elif request.method =='DELETE':
-        if product.orderitem_set.count()>0:
-            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        product.delete()
+    elif request.method == 'DELETE':
+        if product.orderitems.count() > 0:
+            return Response(
+                {"error": "Cant delete product"},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        else:
+            product.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'POST'])
+def collection_list(request):
+    if request.method == 'GET':
+        queryset = Collection.objects.annotate(products_count=Count('product')).all()
+        serializer = CollectionsSerializer(queryset, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = CollectionsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def collection_details(request, pk):
+    collection = get_object_or_404(
+        Collection.objects.annotate(
+            products_count=Count('product')), pk=pk)
+    # Collection.objects.annotate(products_count=Count('products')).all()
+    if request.method == 'GET':
+        serializer = CollectionsSerializer(collection)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = CollectionsSerializer(collection, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    elif request.method == 'DELETE':
+        if collection.products.count() > 0:
+            return Response({'error': 'Collection cannot be deleted because it includes one or more products.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        collection.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-
-
-@api_view()
-def collections_details(request, pk):
-    return Response('ok')

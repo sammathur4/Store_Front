@@ -5,6 +5,7 @@ from store.models import *
 
 class CollectionsSerializer(serializers.ModelSerializer):
     class Meta:
+        model = Collection
         fields = ['id', 'title']
 
 
