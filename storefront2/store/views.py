@@ -7,20 +7,36 @@ from rest_framework.decorators import *
 from rest_framework.response import *
 from .models import *
 from .serializers import *
+from rest_framework.views import *
 
 
-@api_view(['GET', 'POST'])
-def product_list(request):
-    if request.method == 'GET':
+class ProdutList(APIView):
+    def get(self, request):
         queryset = Product.objects.select_related('collection').all()
         serializer = ProductSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
-    elif request.method == 'POST':
+
+    def post(self, request):
         serializer = ProductSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         print(serializer.validated_data)
         return Response('ok')
+
+
+
+# @api_view(['GET', 'POST'])
+# def product_list(request):
+#     if request.method == 'GET':
+#         queryset = Product.objects.select_related('collection').all()
+#         serializer = ProductSerializer(queryset, many=True, context={'request': request})
+#         return Response(serializer.data)
+#     elif request.method == 'POST':
+#         serializer = ProductSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         print(serializer.validated_data)
+#         return Response('ok')
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
