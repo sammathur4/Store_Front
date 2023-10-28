@@ -29,20 +29,12 @@ class ProductViewSet(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CollectionList(ListCreateAPIView):
-    queryset = Collection.objects.annotate(
-        products_count=Count('product')).all()
 
+class CollectionViewSet(ModelViewSet):
+    queryset = Collection.objects.annotate(products_count=Count('product')).all()
     serializer_class = CollectionsSerializer
 
-
-class CollectionDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Collection.objects.annotate(
-        products_count=Count('product')
-    )
-    serializer_class = CollectionsSerializer
-
-    def delete(self, request, pk):
+    def delete(self, request,pk):
         collection = get_object_or_404(
             Collection.objects.annotate(
                 products_count=Count('product')), pk=pk)
@@ -52,3 +44,4 @@ class CollectionDetail(RetrieveUpdateDestroyAPIView):
                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
         collection.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
