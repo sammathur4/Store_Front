@@ -13,29 +13,19 @@ from rest_framework.views import *
 from rest_framework.mixins import *
 from rest_framework.generics import *
 from rest_framework.viewsets import ModelViewSet
-
+from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination
+
 
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['collection_id', 'unit_price']
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
-    # def get_queryset(self):
-    #     queryset = Product.objects.all()
-    #     collection_id = self.request.query_params.get('collection_id')
-    #     if collection_id is not None:
-    #         queryset = queryset.filter(collection_id=collection_id)
-    #
-    #     return queryset
-
-    # filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    # filterset_class = ProductFilter
-    # pagination_class = DefaultPagination
-    # permission_classes = [IsAdminOrReadOnly]
-    # search_fields = ['title', 'description']
-    # ordering_fields = ['unit_price', 'last_update']
+    # pagination_class = PageNumberPagination
+    search_fields = [ 'title', 'description']
+    ordering_fields = ['unit_price', 'last_update']
 
     def get_serializer_context(self):
         return {'request': self.request}
