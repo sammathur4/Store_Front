@@ -121,11 +121,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True)
+    # item = OrderItemSerializer(many=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'customer', 'placed_at', 'payment_status', 'items']
+        fields = ['id', 'customer', 'placed_at', 'payment_status', ]
 
 
 class UpdateOrderSerializer(serializers.ModelSerializer):
