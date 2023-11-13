@@ -13,6 +13,7 @@ def read_message_index():
         return 0
 
 
+
 # Function to write the updated commit message index back to the file
 def write_message_index(index):
     with open(message_index_file, 'w') as file:
